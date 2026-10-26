@@ -1,0 +1,280 @@
+================================================================================
+TP CALCULO NUMERICO - PROBLEMA 12
+Universidad Austral - Ingenieria en Informatica - 2do cuatrimestre 2026
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. ENUNCIADO (transcripcion del PDF de la catedra)
+--------------------------------------------------------------------------------
+
+PROBLEMA 12 - Respuestas mixtas / hibridas
+
+Resuelva el modelo:
+
+    dN/dt = r*N*(1 - N/K) - d*N - F_PN(N,P) * P - F_SN(N,S) * S
+
+    dP/dt = b * F_PN(N,P) * P - m*P - F_SP(P,S) * S
+
+    dS/dt = f * F_SN(N,S) * S + g * F_SP(P,S) * S - q*S
+
+donde N es la presa, P es el depredador y S es el superdepredador.
+Entre las variaciones solo cambian las tasas de consumo per capita
+F_PN, F_SN y F_SP.
+
+
+PARAMETROS DEL MODELO
+
+    Simbolo   Significado
+    -------   -----------------------------------------------------------
+    r         tasa de natalidad de la presa
+    K         capacidad de carga de la presa
+    d         tasa de mortalidad natural de la presa
+    b         eficiencia de conversion presa -> depredador
+    m         tasa de mortalidad natural del depredador
+    f         eficiencia de conversion presa -> superdepredador
+    g         eficiencia de conversion depredador -> superdepredador
+    q         tasa de mortalidad natural del superdepredador
+
+
+METODOS EXIGIDOS
+
+    Con los metodos de Runge-Kutta 2 y Euler.
+    HAGA UN CODIGO DIFERENTE PARA CADA METODO.
+    Utilice las funciones y parametros extra que se desarrollan a continuacion.
+    Lea las recomendaciones para evitar caer en zonas de caos.
+
+
+TERMINOS DE ATAQUE (respuestas funcionales)
+
+    F_PN = a*N / (1 + a*h1*N)              tipo II
+
+    F_SN = c*N^2 / (1 + c*h2*N^2)          tipo III
+
+    F_SP = e*P / (1 + e*h3*P)              tipo II
+
+
+DESCRIPCION DE LOS PARAMETROS EXTRA
+
+    Simbolo   Significado                                          Intervalo tipico
+    -------   --------------------------------------------------  ----------------
+    a, c, e   tasas de ataque                                      0,01 - 0,5
+    h1        tiempo de manipulacion de la presa por el depredador      0,1 - 2
+    h2        tiempo de manipulacion de la presa por el superdep.       0,1 - 2
+    h3        tiempo de manipulacion del depredador por el superdep.    0,1 - 2
+
+
+ADVERTENCIA SOBRE EL CAOS (textual del enunciado)
+
+    "Caos: Si. Los modelos con respuestas mixtas presentan caos con mucha
+    frecuencia. Los sistemas hibridos dependientes de la razon, con un
+    depredador apice de Holling tipo II, generan atractores caoticos para
+    ciertos parametros."
+
+
+CONDICIONES DE APROBACION (textual del enunciado)
+
+    "Debe presentar un informe de los resultados explicando los parametros
+    adoptados antes de las 12:00 hs del dia viernes 30 de Octubre para defender
+    el trabajo en la clase del 3 de Noviembre. Si el informe no esta aprobado o
+    se presenta tarde se debe presentar la correccion antes del 5 de noviembre
+    a las 12:00 hs y de ser aprobados defienden el trabajo en la clase del dia
+    10 de Noviembre."
+
+
+--------------------------------------------------------------------------------
+2. REQUISITOS ADICIONALES INDICADOS EN CLASE
+--------------------------------------------------------------------------------
+
+METODO
+    - Usar Euler modificado / formula de Runge-Kutta de 2do orden.
+    - Un archivo de codigo distinto por metodo.
+
+INFORME
+    - Formato paper, normas academicas argentinas.
+    - Secciones: titulo, resumen, introduccion, resultados, conclusion.
+    - En RESULTADOS: mas figuras y menos texto.
+    - En CONCLUSION: la justificacion de los resultados.
+    - Se espera que justifique el porque de los parametros adoptados.
+    - Epigrafes en todas las figuras (DEBAJO de la figura).
+    - Titulo en todas las tablas (ARRIBA de la tabla).
+    - Tabla de parametros.
+    - El codigo va como ANEXO, detras del informe, dentro del mismo PDF.
+    - Entrega: PDF por el campus.
+
+ELECCION DEL dt (punto explicitamente senalado)
+    - Hay que JUSTIFICAR la eleccion del dt.
+    - Si el dt es muy grande, el metodo NO CONVERGE: genera una inestabilidad
+      numerica del sistema.
+    - Mostrarlo con una figura.
+
+GRAFICOS
+    - Graficos 3D de cada una de las variables.
+    - Mostrar como evoluciona cada variable en el tiempo.
+    - Debe verse ASINTOTICO si se llega al estado de equilibrio.
+
+CODIGO
+    - Bien comentado.
+    - Buenos nombres de variables (es lo que mas se evalua).
+
+ORAL
+    - Presentacion de 10 minutos + 2 a 3 minutos de preguntas.
+    - Hay que explicar: el problema, el resultado y el codigo.
+    - El profesor pregunta "por que" todo el tiempo.
+    - Requiere PowerPoint.
+
+FECHAS
+    - Informe: viernes 30 de octubre, 12:00 hs (por campus).
+    - Defensa oral: 3 de noviembre.
+    - Semana previa: clases de consulta.
+
+
+--------------------------------------------------------------------------------
+3. MATERIAL DE LA CATEDRA DISPONIBLE (del zip del campus)
+--------------------------------------------------------------------------------
+
+    - Resolucion numerica de ecuaciones diferenciales. PVI - Parte 1  Euler.pdf
+    - Resolucion numerica de ecuaciones diferenciales. PVI - Parte 2 Runge Kutta.pdf
+    - Paper de ejemplo: "Validacion de un modelo de toma simultanea de agua.pdf"
+    - Enunciado-Lotka-Volterra.pdf  (problema base de 2 especies)
+    - Problema_1.pdf ... Problema_13.pdf  (las demas variantes)
+    - Ajuste Discreto por Cuadrados Minimos.pdf
+    - Interpolacion Spline.pdf
+    - Metodo de Romberg.pdf / Trapecios.pdf / Integracion Numerica.pdf
+    - Teoria de error.pdf
+    - Tutoriales de Matplotlib (links)
+
+
+--------------------------------------------------------------------------------
+4. ESTADO DEL TRABAJO
+--------------------------------------------------------------------------------
+
+HECHO
+    modelo.py       Las 3 ecuaciones y las 3 respuestas funcionales, comentadas.
+                    Incluye jacobiano_numerico() para el analisis de estabilidad.
+    euler.py        Euler explicito. Orden 1. Una evaluacion de f por paso.
+    rk2.py          Runge-Kutta 2 (Heun). Orden 2. Predictor + corrector.
+    figuras.py      5 helpers: series temporales, retrato de fase 3D,
+                    comparacion de metodos, inestabilidad por dt, convergencia
+                    en log-log.
+    TEORIA.md       Toda la teoria explicada, con el mapa concepto -> archivo
+                    y la tabla de preguntas probables del oral.
+
+PENDIENTE
+    analisis.py     Pasos 1 a 5, con los TODO marcados:
+                      1. Encontrar el equilibrio de coexistencia (fsolve).
+                      2. Verificar que atrae (autovalores con Re < 0).
+                      3. Cota teorica dt <= 2/|lambda_max|.
+                      4. Estudio de convergencia (Euler ~2, RK2 ~4).
+                      5. Generar las figuras.
+    parametros      Elegir valores dentro de los intervalos del enunciado que
+                    den un equilibrio con LAS TRES especies POSITIVAS y fuera
+                    de la zona de caos. JUSTIFICAR cada uno.
+    informe         LaTeX, formato paper (hay plantilla en informe/informe.tex).
+    presentacion    PowerPoint para el oral.
+
+
+PROBLEMA CONOCIDO
+    Con los parametros de prueba que estan actualmente en modelo.py, el
+    DEPREDADOR SE EXTINGUE: integrando hasta t=200 con dt=0,01 da
+
+        N = 3,65    P = 2,8e-37    S = 3,91
+
+    y el tercer autovalor del jacobiano da parte real POSITIVA (+0,082), o sea
+    que ese punto repele. Hay que mover parametros. Guia:
+        - si el depredador se extingue      -> subir b, o bajar e y g
+        - si el superdepredador se extingue -> subir f y g, o bajar q
+        - si nada se asienta (posible caos) -> bajar las tasas de ataque
+          (a, c, e) o subir los tiempos de manipulacion (h1, h2, h3)
+
+
+--------------------------------------------------------------------------------
+5. TEORIA MINIMA (el detalle completo esta en TEORIA.md)
+--------------------------------------------------------------------------------
+
+POR QUE NUMERICO
+    El sistema no tiene solucion analitica: son 3 EDOs acopladas con no
+    linealidades racionales. No existe N(t) = ... Solo se puede avanzar paso
+    a paso.
+
+EULER EXPLICITO
+    y_{n+1} = y_n + dt*f(y_n)
+    Sale de truncar el desarrollo de Taylor en el termino lineal.
+    Error local O(dt^2), error global O(dt). ORDEN 1.
+    Usa la pendiente solo al inicio del intervalo -> sesgo sistematico.
+
+RUNGE-KUTTA 2 (HEUN / EULER MODIFICADO)
+    k1 = f(y_n)
+    k2 = f(y_n + dt*k1)
+    y_{n+1} = y_n + (dt/2)*(k1 + k2)
+    Predictor (paso de Euler de prueba) + corrector (promedio de pendientes).
+    Es la regla del trapecio aplicada al tiempo.
+    Error local O(dt^3), error global O(dt^2). ORDEN 2.
+
+EQUILIBRIO
+    Estado donde dN/dt = dP/dt = dS/dt = 0.
+    Sirve para: (a) validar el codigo, (b) elegir parametros, (c) fijar el dt.
+
+ESTABILIDAD Y COTA DEL dt
+    Cerca del equilibrio el sistema se comporta como y' = J*y, con J el
+    jacobiano. Euler avanza y_{n+1} = (I + dt*J)*y_n, asi que cada modo se
+    multiplica por el factor de amplificacion g = 1 + lambda*dt.
+    Estable si |g| <= 1, lo que para lambda real da:
+
+        dt <= 2 / |lambda_max|
+
+    Si se supera, |g| > 1 y el error SE MULTIPLICA en cada paso: la solucion
+    oscila con amplitud creciente y diverge. Eso es inestabilidad numerica.
+
+    Para RK2 el factor es g = 1 + z + z^2/2 con z = lambda*dt; su region de
+    estabilidad es mas amplia en el plano complejo.
+
+    IMPORTANTE: estabilidad NO es precision. La cota garantiza que no explota,
+    no que este bien. El dt definitivo sale del estudio de convergencia.
+
+AUTOVALORES
+    Re(lambda) < 0 para todos  -> el equilibrio ATRAE (comportamiento asintotico)
+    Re(lambda) > 0 para alguno -> REPELE
+    Im(lambda) != 0            -> se acerca EN ESPIRAL (oscilacion amortiguada)
+
+ESTUDIO DE CONVERGENCIA
+    Integrar con dt, dt/2, dt/4 y comparar contra la corrida mas fina.
+    Si el metodo es de orden p, al partir dt el error se divide por 2^p:
+        Euler -> cociente ~2
+        RK2   -> cociente ~4
+    Valida la implementacion Y justifica el dt.
+    ERROR CLASICO: medirlo en el equilibrio. Ahi todos los dt dan lo mismo y
+    el error da ~1e-14 (ruido de maquina). HAY QUE MEDIRLO EN EL TRANSITORIO.
+
+RESPUESTAS FUNCIONALES
+    Holling II  (F_PN, F_SP):  a*N/(1+a*h*N)
+        Saturante. El techo es 1/h: el depredador se llena.
+        DESESTABILIZA: la mortalidad per capita de la presa cae cuando la presa
+        abunda, lo que realimenta el crecimiento (paradoja del enriquecimiento).
+
+    Holling III (F_SN):  c*N^2/(1+c*h2*N^2)
+        Sigmoidea. El N^2 hace que arranque PLANA.
+        ESTABILIZA: a densidad baja de presa el superdepredador casi no la
+        consume, lo que le da a la presa un REFUGIO justo cuando esta por
+        extinguirse. Modela aprendizaje o cambio de dieta.
+
+    >>> La pregunta "por que tipo III en el superdepredador y tipo II en los
+    >>> otros" se contesta con el refugio a densidades bajas.
+
+OMNIVORIA INTRAGREMIAL
+    S come de DOS niveles troficos (de N y de P) a la vez. Eso es lo que vuelve
+    HIBRIDO al modelo y es la fuente habitual del caos que advierte el enunciado.
+
+CAOS
+    Trayectoria acotada que nunca se repite, extremadamente sensible a las
+    condiciones iniciales.
+    Como detectarlo: la serie nunca se asienta; el retrato de fase 3D llena una
+    region en vez de converger a un punto o un lazo; cambiar la condicion
+    inicial en 1e-6 da una trayectoria totalmente distinta.
+    Por que importa: en regimen caotico no se puede validar el codigo con la
+    trayectoria, porque el redondeo se amplifica.
+
+
+================================================================================
+FIN
+================================================================================
